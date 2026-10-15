@@ -43,6 +43,13 @@ describe("note bar (display.js)", { skip }, () => {
     assertClean(tb);
   });
 
+  it("wraps a long unbroken note instead of widening the message", async (t) => {
+    const { tb } = await boot(t, { messages: TWO, storage: { "note:msg1@example.com": "https://example.com/" + "x".repeat(500) } });
+    const page = await show(tb, 1);
+    assert.match(bar(page).root.querySelector("style").textContent, /overflow-wrap: anywhere/);
+    assertClean(tb);
+  });
+
   it("adds nothing to a message without a note", async (t) => {
     const { tb } = await boot(t, { messages: TWO });
     const page = await show(tb, 1);

@@ -6,7 +6,7 @@
   const host = document.createElement("div");
   const root = host.attachShadow({ mode: "closed" });
   root.innerHTML = `<style>
-    div { font: menu; font-size: 13px; white-space: pre-wrap; margin: 0 0 12px;
+    div { font: menu; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 12px;
       padding: 8px 12px; border-left: 3px solid #2E8B57; border-radius: 4px;
       background: color-mix(in srgb, #2E8B57 12%, Canvas); color: CanvasText; }
     b { font-weight: 600; }
