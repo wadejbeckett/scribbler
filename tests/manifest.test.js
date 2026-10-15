@@ -169,8 +169,8 @@ describe("manifest.json", { skip }, () => {
     assert.deepEqual((await ok.messages.query({ folderId: "account1://INBOX", headerMessageId: "x@example.com", messagesPerPage: 1 })).messages, []);
   });
 
-  it("is version 0.7.0", () => {
-    assert.equal(readManifest().version, "0.7.0");
+  it("is version 0.7.1", () => {
+    assert.equal(readManifest().version, "0.7.1");
   });
 
   it("is named Scribbler but keeps the tNOTE add-on ID, so existing notes survive the update", () => {
