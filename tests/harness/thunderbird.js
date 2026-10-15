@@ -1,5 +1,5 @@
 "use strict";
-// A small, schema-checked model of Thunderbird 153 for running tNOTE's real
+// A small, schema-checked model of Thunderbird 153 for running Scribbler's real
 // source files. Behaviour is copied from the installed Thunderbird's own
 // implementation files (paths inside omni.ja, line numbers as of 153.3.1):
 //   ext-messages.js       chrome/messenger/content/messenger/parent/ext-messages.js
@@ -62,7 +62,7 @@ const jsdomNavigation = (() => {
   return { ok: true };
 })();
 
-const SRC = process.env.TNOTE_SRC || path.resolve(__dirname, "../../src");
+const SRC = process.env.SCRIBBLER_SRC || path.resolve(__dirname, "../../src");
 const UUID = "0c6f3f0e-6b1c-4a59-9d2a-7a1e5e7d0a11";
 const BASE_URL = `moz-extension://${UUID}/`;
 // ExtensionParent.sys.mjs:56
@@ -106,7 +106,7 @@ const ARCHIVES = {
 /** Gecko's ExtensionError reaches the extension as a plain Error with this message. */
 class ExtensionError extends Error {}
 
-// The two toolbar-button APIs tNOTE uses, with their manifest keys. Both are
+// The two toolbar-button APIs Scribbler uses, with their manifest keys. Both are
 // ToolbarButtonAPI subclasses (ext-browserAction.js:22, ext-messageDisplayAction.js:15).
 const ACTION_KEYS = [
   ["browserAction", "browser_action"],
@@ -219,7 +219,7 @@ function captureRejections(world) {
 class FakeThunderbird {
   /**
    * @param {object} [o]
-   * @param {string} [o.src]       directory holding the add-on source (default: ../../src or TNOTE_SRC)
+   * @param {string} [o.src]       directory holding the add-on source (default: ../../src or SCRIBBLER_SRC)
    * @param {object} [o.manifest]  parsed manifest (default: <src>/manifest.json)
    * @param {object} [o.config]    behaviour switches, see below
    */
@@ -235,7 +235,7 @@ class FakeThunderbird {
     this.config = {
       // The message header "Note" button is in the header toolbar (not removed).
       messageDisplayActionButton: true,
-      // The tNOTE button is in the unified toolbar of the mail space.
+      // The Scribbler button is in the unified toolbar of the mail space.
       browserActionButton: true,
       // An opened popup panel, popup window or extension tab gets as far as
       // running note.js.
@@ -969,7 +969,7 @@ class FakeThunderbird {
       return { success: true, record };
     }
     // Without a popup a click emits onClicked (:622-627); openPopup asks for
-    // requirePopupUrl and fails instead (:1087-1089). tNOTE has no onClicked listener.
+    // requirePopupUrl and fails instead (:1087-1089). Scribbler has no onClicked listener.
     return { success: !requirePopupUrl, record: null };
   }
 

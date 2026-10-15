@@ -110,13 +110,13 @@ describe("ensureTag (startup)", { skip }, () => {
 
   it("starts cleanly when the user already has a tag named \"Note\" under another key", async (t) => {
     // ext-messages.js:2100-2101 rejects tags.create when any tag already has the
-    // display name "Note". v0.4.0 names its own tag "tNOTE" in that case.
+    // display name "Note". v0.4.0 named its own tag "tNOTE" in that case; v0.7.0 names it "Scribbler".
     const { tb } = await boot(t, { tags: [...DEFAULT_TAGS, USER_NOTE_TAG] });
     assert.deepEqual(tb.unhandled.map((e) => e.message), [], "startup ensureTag() rejected without a handler");
-    assert.deepEqual(argsOf(tb, "messages.tags.create"), [["mailnote", "tNOTE", GREEN]]);
+    assert.deepEqual(argsOf(tb, "messages.tags.create"), [["mailnote", "Scribbler", GREEN]]);
     assert.deepEqual(tb.apiCalls("messages.tags.create")[0].rejected, undefined, "tags.create succeeded");
     assert.deepEqual(tb.tags.find((x) => x.key === "note"), USER_NOTE_TAG, "the user's own Note tag is untouched");
-    assert.deepEqual(tb.tags.find((x) => x.key === "mailnote"), { key: "mailnote", tag: "tNOTE", color: GREEN, ordinal: "" });
+    assert.deepEqual(tb.tags.find((x) => x.key === "mailnote"), { key: "mailnote", tag: "Scribbler", color: GREEN, ordinal: "" });
     assert.deepEqual(warnings(tb), []);
     assertClean(tb);
   });
@@ -340,7 +340,7 @@ describe("menu click: opening the editor", { skip }, () => {
       "browserAction.openPopup",
       "browserAction.setPopup",
     ]);
-    assert.deepEqual(warnings(tb), ["tNOTE: Error: view not ready"]);
+    assert.deepEqual(warnings(tb), ["Scribbler: Error: view not ready"]);
     assert.deepEqual(tb.mailTab.selected, [1], "Invoice 42 is still the one displayed");
     await flush();
     assert.equal(tb.popups[0].kind, "browserAction");
@@ -899,10 +899,10 @@ describe("setPopup is not awaited, so a stalled answer cannot hold up the editor
     const editor = tb.popups.find((p) => p.kind === "tab");
     assert.equal(popupText(editor).subject, "Invoice 42", "the editor tab carries the id itself");
     assert.deepEqual(warnings(tb).sort(), [
-      "tNOTE: Error: header popup refused",
-      "tNOTE: Error: header popup refused",
-      "tNOTE: Error: toolbar popup refused",
-      "tNOTE: Error: toolbar popup refused",
+      "Scribbler: Error: header popup refused",
+      "Scribbler: Error: header popup refused",
+      "Scribbler: Error: toolbar popup refused",
+      "Scribbler: Error: toolbar popup refused",
     ]);
     assertClean(tb); // includes: no unhandled rejections
   });
@@ -1182,7 +1182,7 @@ describe("\"save\" request", { skip }, () => {
     const from = tb.calls.length;
     assert.equal(await send(tb, { type: "save", id: msgs[0].id, text: "Waiting for PO" }), true);
     const created = tb.calls.slice(from).filter((c) => c.api === "messages.tags.create");
-    assert.deepEqual(created.map((c) => [c.args, c.rejected]), [[["mailnote", "tNOTE", GREEN], undefined]]);
+    assert.deepEqual(created.map((c) => [c.args, c.rejected]), [[["mailnote", "Scribbler", GREEN], undefined]]);
     assert.equal(tb.storage.get("note:msg1@example.com"), "Waiting for PO");
     assert.deepEqual(tagsOf(tb, msgs[0].id), ["mailnote"], "the message is tagged");
     assert.deepEqual(tb.tags.find((x) => x.key === "note"), USER_NOTE_TAG);
@@ -1218,8 +1218,8 @@ describe("\"save\" request", { skip }, () => {
     assertClean(tb);
   });
 
-  it("keeps the note when both \"Note\" and \"tNOTE\" are taken by the user's own tags", async (t) => {
-    const theirs = [USER_NOTE_TAG, { key: "tnote", tag: "tNOTE", color: "#123456", ordinal: "" }];
+  it("keeps the note when both \"Note\" and \"Scribbler\" are taken by the user's own tags", async (t) => {
+    const theirs = [USER_NOTE_TAG, { key: "scribbler", tag: "Scribbler", color: "#123456", ordinal: "" }];
     const { tb, msgs } = await boot(t, { tags: [...DEFAULT_TAGS, ...theirs] });
     assert.equal(warnings(tb).length, 1, "startup logged the failed tag set-up");
     assert.equal(await send(tb, { type: "save", id: msgs[0].id, text: "x" }), true);
@@ -1496,7 +1496,7 @@ describe("\"forDisplay\" keeps a noted message's folder on record (v0.6.0)", { s
     tb.faults["storage.local.set"] = new Error("disk full");
     tb.mailTab.selected = [1];
     assert.deepEqual(await forDisplay(tb), { key: "note:msg1@example.com", text: "PO" });
-    assert.deepEqual(warnings(tb), ["tNOTE: Error: disk full"]);
+    assert.deepEqual(warnings(tb), ["Scribbler: Error: disk full"]);
     assertClean(tb);
   });
 });
@@ -1769,7 +1769,7 @@ describe("\"reveal\" request: select the note's message in the list's window (v0
     const { tb } = await boot(t, { messages: MESSAGES, storage: STORAGE });
     tb.unviewable.add(ARCHIVES);
     assert.deepEqual(await reveal(tb, "msg3@example.com", tb.mainWindow.id), { id: 3 });
-    assert.deepEqual(warnings(tb), ["tNOTE: Error: Folder of the requested message(s) is not viewable in any of the enabled folder modes"]);
+    assert.deepEqual(warnings(tb), ["Scribbler: Error: Folder of the requested message(s) is not viewable in any of the enabled folder modes"]);
     assert.equal(tb.mailTab.folder.name, "Inbox");
     assertClean(tb);
   });
@@ -1844,7 +1844,7 @@ describe("\"remove\" request: delete a note from the list (v0.6.0)", { skip }, (
     tb.faults["messages.update"] = new Error("folder is read-only");
     assert.equal(await remove(tb, "msg1@example.com"), true);
     assert.equal(tb.storage.has("note:msg1@example.com"), false);
-    assert.deepEqual(warnings(tb), ["tNOTE: Error: folder is read-only"]);
+    assert.deepEqual(warnings(tb), ["Scribbler: Error: folder is read-only"]);
     assertClean(tb);
   });
 

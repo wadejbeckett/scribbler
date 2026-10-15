@@ -7,7 +7,7 @@ const schemas = thunderbirdSchemas();
 const skip = schemas.ok ? false : `${schemas.reason} - schema-checked tests skipped`;
 
 /**
- * Starts a fake Thunderbird with tNOTE's background page running.
+ * Starts a fake Thunderbird with Scribbler's background page running.
  * @param {object} [o]
  * @param {object} [o.config]    FakeThunderbird config overrides
  * @param {object} [o.manifest]  manifest override

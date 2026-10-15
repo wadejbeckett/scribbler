@@ -169,21 +169,28 @@ describe("manifest.json", { skip }, () => {
     assert.deepEqual((await ok.messages.query({ folderId: "account1://INBOX", headerMessageId: "x@example.com", messagesPerPage: 1 })).messages, []);
   });
 
-  it("is version 0.6.2", () => {
-    assert.equal(readManifest().version, "0.6.2");
+  it("is version 0.7.0", () => {
+    assert.equal(readManifest().version, "0.7.0");
   });
 
-  it("tnote.xpi contains exactly the current src/ files plus LICENSE", (t) => {
-    const xpi = path.join(SRC, "..", "tnote.xpi");
-    if (!fs.existsSync(xpi)) return t.skip("tnote.xpi not built");
+  it("is named Scribbler but keeps the tNOTE add-on ID, so existing notes survive the update", () => {
+    // Thunderbird keys storage.local by add-on ID: a new ID would orphan every note.
+    const m = readManifest();
+    assert.equal(m.name, "Scribbler");
+    assert.equal(m.browser_specific_settings.gecko.id, "mail-notes@noiz.co.za");
+  });
+
+  it("scribbler.xpi contains exactly the current src/ files plus LICENSE", (t) => {
+    const xpi = path.join(SRC, "..", "scribbler.xpi");
+    if (!fs.existsSync(xpi)) return t.skip("scribbler.xpi not built");
     const srcFiles = filesUnder(SRC);
     assert.deepEqual(xpiFiles(xpi).sort(), [...srcFiles, "LICENSE"].sort());
     for (const f of srcFiles) {
       const packed = execFileSync("unzip", ["-p", xpi, f]);
-      assert.ok(packed.equals(fs.readFileSync(path.join(SRC, f))), `${f} in tnote.xpi matches src/`);
+      assert.ok(packed.equals(fs.readFileSync(path.join(SRC, f))), `${f} in scribbler.xpi matches src/`);
     }
     const licence = execFileSync("unzip", ["-p", xpi, "LICENSE"]);
-    assert.ok(licence.equals(fs.readFileSync(path.join(SRC, "..", "LICENSE"))), "LICENSE in tnote.xpi matches the project's");
+    assert.ok(licence.equals(fs.readFileSync(path.join(SRC, "..", "LICENSE"))), "LICENSE in scribbler.xpi matches the project's");
   });
 });
 
@@ -214,8 +221,8 @@ describe("build.sh", () => {
     }
     const project = path.join(SRC, "..");
     if (!fs.existsSync(path.join(project, "build.sh"))) return t.skip(`no build.sh next to ${SRC}`);
-    // Build in a copy, never over the project's own tnote.xpi.
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "tnote-build-"));
+    // Build in a copy, never over the project's own scribbler.xpi.
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "scribbler-build-"));
     t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
     fs.copyFileSync(path.join(project, "build.sh"), path.join(dir, "build.sh"));
     fs.copyFileSync(path.join(project, "LICENSE"), path.join(dir, "LICENSE"));
@@ -241,7 +248,7 @@ describe("build.sh", () => {
     }
 
     execFileSync("sh", [path.join(dir, "build.sh")], { stdio: "ignore" });
-    const xpi = path.join(dir, "tnote.xpi");
+    const xpi = path.join(dir, "scribbler.xpi");
     const packed = xpiFiles(xpi);
     for (const f of junk) assert.ok(!packed.includes(f), `${f} is left out`);
     assert.deepEqual(packed.sort(), [...wanted, "LICENSE"].sort());

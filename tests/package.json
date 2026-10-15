@@ -1,7 +1,7 @@
 {
-  "name": "tnote-tests",
+  "name": "scribbler-tests",
   "private": true,
-  "description": "Unit tests for tNOTE, validated against the installed Thunderbird's own WebExtension schemas.",
+  "description": "Unit tests for Scribbler, validated against the installed Thunderbird's own WebExtension schemas.",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "test": "node --test"

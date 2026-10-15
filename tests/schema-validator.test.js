@@ -159,7 +159,7 @@ describe("schema validation of API calls", { skip }, () => {
     tb.selectMessages([tb.addMessage().id]);
     const m = api(tb);
     for (const ns of ["browserAction", "messageDisplayAction"]) {
-      // tNOTE's own calls.
+      // Scribbler's own calls.
       assert.equal(await m[ns].setPopup({ popup: "note.html?id=7" }), null);
       assert.equal(await m[ns].setPopup({ popup: "note.html" }), null);
       // "popup" is required (string or null); windowId is marked unsupported.

@@ -9,13 +9,13 @@ async function ensureTag() {
   const tag = tags.find((t) => t.key === TAG);
   if (!tag) {
     // tags.create refuses a name already in use, such as the user's own "Note" tag.
-    const name = tags.some((t) => t.tag === "Note") ? "tNOTE" : "Note";
+    const name = tags.some((t) => t.tag === "Note") ? "Scribbler" : "Note";
     await messenger.messages.tags.create(TAG, name, GREEN);
   } else if (tag.color.toUpperCase() !== GREEN) {
     await messenger.messages.tags.update(TAG, { color: GREEN });
   }
 }
-ensureTag().catch((e) => console.warn("tNOTE: could not set up the Note tag", e));
+ensureTag().catch((e) => console.warn("Scribbler: could not set up the Note tag", e));
 
 messenger.menus.create({ id: "mail-note", title: "Add note…", contexts: ["message_list"] });
 
@@ -37,14 +37,14 @@ messenger.menus.onShown.addListener(async (info) => {
 // on desktops with focus-stealing prevention (Cinnamon), so the last resort is a
 // tab in the same window instead.
 const POPUP = "note.html"; // header Note button: this message's note
-const LIST = "list.html"; // toolbar tNOTE button: all notes
+const LIST = "list.html"; // toolbar Scribbler button: all notes
 
 // Thunderbird reads the popup URL when the panel opens, so pointing it at this
 // message just for the call hands the panel its id with no shared state.
 // setPopup is deliberately not awaited: its promise waits for a repaint in every
 // window, which never comes in a hidden message pane, but the new URL itself is
 // applied as soon as the call arrives, ahead of the openPopup call behind it.
-const warn = (e) => console.warn("tNOTE:", e);
+const warn = (e) => console.warn("Scribbler:", e);
 
 async function openPanel(action, url, opts, reset) {
   action.setPopup({ popup: url }).catch(warn);
@@ -219,7 +219,7 @@ async function save(req) {
       }
       await messenger.messages.update(m.id, { tags: [...tags] });
     } catch (e) {
-      console.warn("tNOTE: note saved but the message could not be tagged", e);
+      console.warn("Scribbler: note saved but the message could not be tagged", e);
     }
   }
   return true;

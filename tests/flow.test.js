@@ -202,7 +202,7 @@ describe("regression guard", { skip }, () => {
   it("v0.3.1's popup-window fallback leaves the editor in a window that does not have focus on Cinnamon/X11", async (t) => {
     // Re-create v0.3.1's last resort (windows.create popup) in a copy of the
     // current background.js and show the suite's focus check catches it.
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "tnote-v031-"));
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "scribbler-v031-"));
     t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
     fs.cpSync(SRC, dir, { recursive: true });
     const bgFile = path.join(dir, "background.js");

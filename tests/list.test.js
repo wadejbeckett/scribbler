@@ -323,7 +323,7 @@ describe("clicking a note: select its message, open its note in the panel (v0.6.
     items()[0].click();
     await flush();
     assert.match(tb.apiCalls("mailTabs.setSelectedMessages")[0].rejected, /not viewable in any of the enabled folder modes/);
-    assert.deepEqual(warnings(tb), ["tNOTE: Error: Folder of the requested message(s) is not viewable in any of the enabled folder modes"]);
+    assert.deepEqual(warnings(tb), ["Scribbler: Error: Folder of the requested message(s) is not viewable in any of the enabled folder modes"]);
     assert.equal(tb.mailTab.folder.name, "Inbox");
     assert.deepEqual(argsOf(tb, "messageDisplay.open"), []);
     assert.equal(popup.page.url, BASE_URL + "note.html?id=3&from=list");
@@ -338,7 +338,7 @@ describe("clicking a note: select its message, open its note in the panel (v0.6.
     const { popup, items } = await openList(tb);
     items()[0].click();
     await flush();
-    assert.deepEqual(warnings(tb), ["tNOTE: Error: view not ready"]);
+    assert.deepEqual(warnings(tb), ["Scribbler: Error: view not ready"]);
     assert.equal(popup.page.url, BASE_URL + "note.html?id=1&from=list");
     assert.equal(editorIn(popup).text, "PO");
     assertClean(tb);

@@ -59,7 +59,7 @@ function extract(omni) {
   } catch {
     throw new Error("the `unzip` command is needed to read omni.ja");
   }
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "tnote-omni-"));
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "scribbler-omni-"));
   try {
     execFileSync(
       "unzip",

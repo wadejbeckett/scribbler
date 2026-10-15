@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "tNOTE",
+  "name": "Scribbler",
   "description": "Right-click a message to add a private note; read it at the top of the message.",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "author": "Noiz",
   "browser_specific_settings": {
     "gecko": {
