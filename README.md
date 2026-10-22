@@ -15,3 +15,13 @@ Thunderbird gives add-ons no hook to run code when they are uninstalled, so the 
 ## Tests
 
 `cd tests && npm install && npm test`. The suite fakes Thunderbird's add-on API and validates every call against the real schemas read from the installed Thunderbird (`/usr/lib/thunderbird/omni.ja`, override with `TB_OMNI`), so a call Thunderbird would reject fails the test. jsdom is the only dependency.
+
+## Support this project
+
+Scribbler is free software from Noiz. If it is useful to you, the main way to support its development is a donation in Monero (XMR):
+
+```text
+44BtMn9izxH8mK2yFbSdY6Di7TNobkLbnHdZ6gZQjukCME5vsNhtPRtH4TcVkDHKHLhSpAJbsjv8gCdYuSZVMpXgMkUC1hV
+```
+
+You can also help by reporting bugs, sending fixes or starring the repository.
